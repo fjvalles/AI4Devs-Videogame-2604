@@ -57,7 +57,10 @@
       </div>
       <h2>Elegir piso</h2>
       <div id="level-select" class="level-select" aria-label="Selector de pisos"></div>
-      <button data-action="play">▶ Entrar</button>
+      <div style="display: flex; gap: 16px; margin-top: 10px;">
+        <button id="btn-continue" data-action="continue" class="hidden">▶ Continuar Partida</button>
+        <button data-action="play">▶ Entrar</button>
+      </div>
     </div>
 
     <div id="screen-paused" class="overlay screen hidden">

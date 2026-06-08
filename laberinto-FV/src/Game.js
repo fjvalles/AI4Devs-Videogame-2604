@@ -56,6 +56,7 @@ export class Game {
     this.levelTimeLeft = 0;
     this.isHellMode = false;
     this.nextReviveAt = 0;
+    this.nextSaveAt = 0;
   }
 
   startRun(level = this.selectedLevel || 1) {
@@ -458,6 +459,7 @@ export class Game {
     }
     switch (action) {
       case "play": this.startRun(); break;
+      case "continue": this.continueRun(); break;
       case "retry": this.startRun(this.level); break;
       case "resume": if (this.state === STATE.PAUSED) this.state = STATE.PLAYING; break;
       case "menu": this.toMenu(); break;
@@ -571,6 +573,12 @@ export class Game {
     collectItems(this);
     this.checkExit();
     this.camera.follow(this.player, this.map);
+
+    // Guardado automático periódico (cada 3 segundos)
+    if (this.time >= this.nextSaveAt) {
+      this.saveRun();
+      this.nextSaveAt = this.time + 3;
+    }
 
     input.clearFrame();
   }
@@ -1025,9 +1033,70 @@ export class Game {
     localStorage.setItem("laberinto.highestUnlocked", String(this.highestUnlocked));
   }
 
+  saveRun() {
+    if (this.state !== STATE.PLAYING || !this.player || this.player.hp <= 0) return;
+    const runState = {
+      level: this.level,
+      runStartedAt: this.runStartedAt,
+      timeOffset: this.time - this.runStartedAt,
+      stats: this.stats,
+      player: {
+        hp: this.player.hp,
+        maxHp: this.player.maxHp,
+        xp: this.player.xp,
+        xpNext: this.player.xpNext,
+        level: this.player.level,
+        attackBonus: this.player.attackBonus,
+        resistBonus: this.player.resistBonus,
+        weaponType: this.player.weapon.type,
+        inventory: this.player.inventory,
+      }
+    };
+    localStorage.setItem("laberinto.savedRun", JSON.stringify(runState));
+  }
+
+  continueRun() {
+    const saved = localStorage.getItem("laberinto.savedRun");
+    if (!saved) return;
+    try {
+      const runState = JSON.parse(saved);
+      this.level = runState.level;
+      this.selectedLevel = this.level;
+      this.stats = runState.stats || { kills: 0, bossKilled: false };
+      this.runStartedAt = this.time - (runState.timeOffset || 0);
+
+      // Reconstruct player
+      this.player = this.makePlayer(0, 0);
+      const p = this.player;
+      const sp = runState.player;
+      p.hp = sp.hp;
+      p.maxHp = sp.maxHp;
+      p.xp = sp.xp;
+      p.xpNext = sp.xpNext;
+      p.level = sp.level;
+      p.attackBonus = sp.attackBonus;
+      p.resistBonus = sp.resistBonus;
+      p.weapon = makeWeapon(sp.weaponType || "sword");
+      p.inventory = sp.inventory;
+
+      // Build the level layout
+      this.buildLevel(randomSeed());
+
+      this.state = STATE.PLAYING;
+    } catch (err) {
+      console.error("Error al cargar la partida guardada:", err);
+      this.clearSavedRun();
+    }
+  }
+
+  clearSavedRun() {
+    localStorage.removeItem("laberinto.savedRun");
+  }
+
   gameOver() {
     this.player.hp = 0;
     this.state = STATE.GAME_OVER;
+    this.clearSavedRun();
     setMusicLevel(0);
     sfx.gameover();
   }

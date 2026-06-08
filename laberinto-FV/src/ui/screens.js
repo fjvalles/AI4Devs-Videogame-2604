@@ -20,6 +20,7 @@ export function initScreens(game) {
   const floorVisualizer = document.getElementById("floor-visualizer");
 
   const levelSelect = document.getElementById("level-select");
+  const btnContinue = document.getElementById("btn-continue");
 
   // Crear nodos del visualizador de pisos
   if (floorVisualizer) {
@@ -38,6 +39,13 @@ export function initScreens(game) {
       syncLevelSelect(game, levelSelect);
       const visibleId = SCREENS[game.state] || null;
       for (const el of all) el.classList.toggle("hidden", el.id !== visibleId);
+
+      // Mostrar/ocultar el botón Continuar si hay una partida guardada
+      if (game.state === STATE.MENU && btnContinue) {
+        const hasSaved = localStorage.getItem("laberinto.savedRun") !== null;
+        btnContinue.classList.toggle("hidden", !hasSaved);
+      }
+
       hud.classList.toggle("hidden", game.state !== STATE.PLAYING);
       if (floorVisualizer) {
         floorVisualizer.classList.toggle("hidden", game.state !== STATE.PLAYING);
