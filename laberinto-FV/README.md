@@ -5,6 +5,8 @@ dependencias). Desciende por una mazmorra inspirada en historias de anime de
 dungeons: pelea con monstruos, abre cofres, derrota al guardián para conseguir
 su sello y baja por escaleras al siguiente piso. Tiene 20 pisos desbloqueables.
 
+Puedes probar el juego en vivo aquí: **[https://asteria-dungeon.netlify.app/](https://asteria-dungeon.netlify.app/)**
+
 ## ▶️ Cómo jugar
 
 | Acción | Tecla |
