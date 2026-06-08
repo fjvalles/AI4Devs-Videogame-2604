@@ -1,0 +1,90 @@
+// Plantillas de monstruo. Cada tipo: stats + parámetros de IA + dropTable.
+
+export const MONSTER_TYPES = {
+  slime: {
+    key: "slime", emoji: "🟢",
+    hp: 24, speed: 58, damage: 5, radius: 14,
+    detectRange: 180, loseRange: 300,
+    dropTable: "slime",
+  },
+  bat: {
+    key: "bat", emoji: "🦇",
+    hp: 18, speed: 112, damage: 5, radius: 12,
+    detectRange: 290, loseRange: 430,
+    dropTable: "bat",
+  },
+  guard: {
+    key: "guard", emoji: "👹",
+    hp: 56, speed: 82, damage: 10, radius: 15,
+    detectRange: 240, loseRange: 360,
+    dropTable: "guard",
+  },
+  mage: {
+    key: "mage", emoji: "🧙",
+    hp: 28, speed: 52, damage: 0, radius: 13,
+    detectRange: 290, loseRange: 440,
+    dropTable: "mage",
+    ranged: true,
+    rangedOnly: true,
+    shootRange: 230,
+    shootCooldownMs: 2100,
+    projectileSpeed: 230,
+    projectileDamage: 12,
+  },
+  archer: {
+    key: "archer", emoji: "🏹",
+    hp: 38, speed: 58, damage: 0, radius: 13,
+    detectRange: 330, loseRange: 500,
+    dropTable: "bat",
+    ranged: true,
+    rangedOnly: true,
+    shootRange: 255,
+    shootCooldownMs: 1850,
+    projectileSpeed: 285,
+    projectileDamage: 10,
+  },
+  bomber: {
+    key: "bomber", emoji: "💣",
+    hp: 46, speed: 66, damage: 0, radius: 14,
+    detectRange: 310, loseRange: 470,
+    dropTable: "guard",
+    ranged: true,
+    rangedOnly: true,
+    shootRange: 210,
+    shootCooldownMs: 2400,
+    projectileSpeed: 165,
+    projectileDamage: 18,
+    projectileType: "bomb",
+  },
+  frost: {
+    key: "frost", emoji: "❄️",
+    hp: 42, speed: 82, damage: 6, radius: 14,
+    detectRange: 260, loseRange: 420,
+    dropTable: "mage",
+    ranged: true,
+    shootRange: 190,
+    shootCooldownMs: 2600,
+    projectileSpeed: 210,
+    projectileDamage: 8,
+    projectileType: "ice",
+  },
+  boss: {
+    key: "boss", emoji: "🐲",
+    hp: 210, speed: 42, damage: 12, radius: 22,
+    detectRange: 390, loseRange: 650,
+    dropTable: "boss",
+    isBoss: true,
+    ranged: true,
+    shootRange: 330,
+    shootCooldownMs: 2100,
+    projectileSpeed: 215,
+    projectileDamage: 10,
+    projectileType: "darkness",
+    guaranteed: ["key", "weapon:sword", "coin:10"],
+  },
+};
+
+// Pool de spawn por piso (Game.js elige según piso actual)
+export const SPAWN_POOL_L1 = ["slime", "slime", "bat", "guard"];
+export const SPAWN_POOL_L2 = ["slime", "bat", "guard", "mage", "archer", "frost"];
+export const SPAWN_POOL_L3 = ["bat", "guard", "mage", "mage", "archer", "archer", "bomber", "frost"];

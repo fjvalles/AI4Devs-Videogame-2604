@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La mazmorra de Asteria</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game" width="800" height="600"></canvas>
+    <div id="floor-visualizer" class="hidden"></div>
+
+    <!-- HUD: visible solo en PLAYING -->
+    <div id="hud" class="overlay hidden">
+      <div class="hud-left">
+        <span id="hud-hp">❤️ 100</span>
+        <span id="hud-coins"><span class="yellow-coin">🪙</span> 0</span>
+        <span id="hud-ammo">🏹 0</span>
+        <span id="hud-keys">🌀 0</span>
+        <span id="hud-weapon" class="hud-weapon">ARMA: 👊 Puños</span>
+        <span id="hud-effects"></span>
+      </div>
+      <div class="hud-shop" id="hud-shop">
+        <button class="shop-btn" data-action="buyHp" title="Canjear +25 HP por 10 monedas">[V] Hechicería: 💗 +25 HP (10<span class="yellow-coin">🪙</span>)</button>
+        <button class="shop-btn" data-action="buyAmmo" title="Canjear +10 Flechas por 5 monedas">[F] Suministros: 🏹 +10 Flechas (5<span class="yellow-coin">🪙</span>)</button>
+      </div>
+      <div class="hud-right">
+        <div id="hud-timer-container" class="hud-timer-container">
+          <span id="hud-timer-icon">⏱️</span>
+          <span id="hud-timer-text">01:00</span>
+        </div>
+        <div id="hud-level"></div>
+      </div>
+      <div id="hud-banner" class="hud-banner hidden">🌀 Necesitas el sello del guardián 🐲</div>
+      <div id="hud-pickup" class="hud-pickup hidden"></div>
+      <div id="hud-tutorial" class="hud-tutorial hidden"></div>
+    </div>
+
+    <!-- Pantallas: el JS muestra una a la vez según el estado -->
+    <div id="screen-menu" class="overlay screen">
+      <h1>🏰 La mazmorra de Asteria</h1>
+      <p>Desciende por pisos sellados, derrota guardianes y salva aventureros para formar tu equipo.</p>
+      <div class="controls">
+        <span><strong>WASD/flechas</strong> moverse</span>
+        <span><strong>Espacio</strong> atacar</span>
+        <span><strong>1</strong> espada · <strong>2</strong> arco</span>
+        <span><strong>ESC</strong> pausa</span>
+      </div>
+      <p class="hint">Cada sala tiene una dinámica: pelea, tesoro custodiado, trampas, distancia, emboscada, rescate o escape con hielo.</p>
+      <div class="tutorial-card">
+        <strong>Primer piso recomendado:</strong>
+        <span>1. Muévete con WASD o flechas.</span>
+        <span>2. Mantén Espacio para atacar hacia donde miras.</span>
+        <span>3. Acércate a cofres y drops para recogerlos.</span>
+        <span>4. Derrota al guardián, toma el sello 🌀 y baja por las escaleras 🪜.</span>
+      </div>
+      <h2>Elegir piso</h2>
+      <div id="level-select" class="level-select" aria-label="Selector de pisos"></div>
+      <button data-action="play">▶ Entrar</button>
+    </div>
+
+    <div id="screen-paused" class="overlay screen hidden">
+      <h1>⏸️ Pausa</h1>
+      <div class="controls">
+        <span><strong>WASD/flechas</strong> moverse</span>
+        <span><strong>Espacio</strong> atacar</span>
+        <span><strong>1/2</strong> cambiar arma</span>
+        <span><strong>ESC</strong> continuar</span>
+      </div>
+      <button data-action="resume">▶ Continuar</button>
+      <button data-action="menu">↩ Menú</button>
+    </div>
+
+    <div id="screen-gameover" class="overlay screen hidden">
+      <h1>💀 Game Over</h1>
+      <p class="stats" id="stats-gameover"></p>
+      <button data-action="retry">↻ Reintentar piso</button>
+      <button data-action="menu">↩ Menú</button>
+    </div>
+
+    <div id="screen-victory" class="overlay screen hidden">
+      <h1>🏆 ¡Escapaste!</h1>
+      <p class="stats" id="stats-victory"></p>
+      <button data-action="play">↻ Jugar de nuevo</button>
+      <button data-action="menu">↩ Menú</button>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
